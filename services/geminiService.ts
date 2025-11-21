@@ -1,8 +1,8 @@
-
 import { GoogleGenAI } from "@google/genai";
-import { ExplanationRequest, MathProblem } from "../types";
+import { ExplanationRequest } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Vite uses import.meta.env.VITE_API_KEY
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
 
 const POSITIVE_FEEDBACKS = [
   "우와! 정말 대단해요! 완벽하게 이해했네요! 🎉",
@@ -76,30 +76,4 @@ export const getMathExplanation = async (request: ExplanationRequest): Promise<s
           
           Logic to explain: 
           1. First find 1/${problem.totalGroups}. ${problem.totalItems} divided by ${problem.totalGroups} is ${problem.groupSize}.
-          2. Then multiply by ${problem.targetGroups}. ${problem.groupSize} times ${problem.targetGroups} is ${problem.targetItems}.
-          
-          Explain this step-by-step very simply in Korean.
-          IMPORTANT: Reply ONLY in Korean.
-        `;
-      }
-    }
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-      config: {
-        temperature: 0.9,
-        maxOutputTokens: 150,
-      }
-    });
-
-    return response.text || getRandomFeedback(isCorrect);
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return getRandomFeedback(request.isCorrect);
-  }
-};
-
-export const getInitialGreeting = async (): Promise<string> => {
-  return "안녕! 냠냠 분수랑 같이 신나는 모험 떠나볼까?";
-}
+          2. Then multiply by ${problem.targetGroups}. ${
